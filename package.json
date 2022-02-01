@@ -1,0 +1,29 @@
+{
+  "name": "cerberus-2",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --experimental-json-modules ./index.js",
+    "deployLocalComms": "node --experimental-json-modules ./deploy-commands.js",
+    "deployGlobalComms": "echo \"ERR: Not implemented\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "CrazyCatzzz",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/builders": "^0.6.0",
+    "@discordjs/opus": "^0.7.0",
+    "@discordjs/rest": "^0.1.0-canary.0",
+    "@discordjs/voice": "^0.8.0",
+    "discord-api-types": "^0.23.1",
+    "discord.js": "^13.1.0",
+    "ffmpeg": "^0.0.4",
+    "fluent-ffmpeg": "^2.1.2",
+    "node": "^16.6.1",
+    "node-fetch": "^3.0.0",
+    "sodium": "^3.0.2",
+    "ytdl-core": "^4.10.0"
+  }
+}

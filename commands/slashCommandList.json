@@ -1,0 +1,15 @@
+{
+    "commands": [
+        { "name": "play", "description": "Riproduci una canzone.", "options": [
+            {"name": "song", "description": "L'URL della canzone da riprodurre", "type": "string", "required": true }
+        ] },
+
+        { "name": "stop", "description": "Stoppa il player e pulisci la queue.", "options": [] },
+        
+        { "name": "queue", "description": "Mostra la queue. [WIP]", "options": [] },
+
+        { "name": "skip", "description": "Salta una canzone.", "options": [] },
+
+        { "name": "help", "description": "Mostra i comandi.", "options": [] }
+    ]
+}
