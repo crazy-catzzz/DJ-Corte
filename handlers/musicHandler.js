@@ -1,4 +1,7 @@
-import ytdl from "ytdl-core";
+//import ytdl from "ytdl-core";
+
+import ytdl from "youtube-dl-exec";
+
 import { MessageEmbed } from "discord.js";
 import { createAudioPlayer, createAudioResource, joinVoiceChannel, AudioPlayerStatus } from "@discordjs/voice";
 
@@ -62,7 +65,16 @@ export class MusicHandler {
     async playSong(guild, song) {
         const serverQueue = queue.get(guild.id);
         
-        player.play(createAudioResource(ytdl((await song).url)));
+        const stream = ytdl((await song).url, {
+            o: '-',
+            q: '',
+            f: 'bestaudio[ext=webm+acodec=opus+asr=48000]/bestaudio',
+            r: '100K',
+        }, { stdio: ['ignore', 'pipe', 'ignore'] });
+
+        player.play(createAudioResource(stream.stdout));
+
+        //player.play(createAudioResource(ytdl((await song).url)));
         player.on("stateChange", (oldState, newState) => {
             if (newState == AudioPlayerStatus.Idle && oldState == AudioPlayerStatus.Playing) {
                 serverQueue.songs.shift();

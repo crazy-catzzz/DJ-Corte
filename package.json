@@ -24,6 +24,7 @@
     "node": "^16.6.1",
     "node-fetch": "^3.0.0",
     "sodium": "^3.0.2",
+    "youtube-dl-exec": "^2.0.2",
     "ytdl-core": "^4.10.0"
   }
 }
