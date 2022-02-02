@@ -63,10 +63,12 @@ export class MusicHandler {
         const serverQueue = queue.get(guild.id);
         
         player.play(createAudioResource(ytdl((await song).url)));
-        player.on(AudioPlayerStatus.Paused, () => {
+        player.on("stateChange", (oldState, newState) => {
+            if (newState = AudioPlayerIdleState) {
                 serverQueue.songs.shift();
                 this.playSong(guild, serverQueue.songs[0], player);
-            });
+            }
+        });
 
         if (!song) {
             serverQueue.connection.destroy();
