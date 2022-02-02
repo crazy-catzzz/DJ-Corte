@@ -96,7 +96,7 @@ export class MusicHandler {
         if (!serverQueue.songs[1]) return interaction.reply("Non ci sono altre canzoni da riprodurre!");
 
         serverQueue.songs.shift();
-        player.play(createAudioResource(ytdl((await serverQueue.songs[0]).url)));
+        player.play(createAudioResource(ytdl((await serverQueue.songs[0]).url, { filter: "audioonly", quality: "lowestaudio" })));
         interaction.reply(`Ho skippato la canzone precedente!`);
     }
 
