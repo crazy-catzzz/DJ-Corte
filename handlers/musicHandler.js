@@ -64,7 +64,7 @@ export class MusicHandler {
         
         player.play(createAudioResource(ytdl((await song).url)));
         player.on("stateChange", (oldState, newState) => {
-            if (newState = AudioPlayerIdleState) {
+            if (newState == AudioPlayerStatus.Idle && oldState == AudioPlayerStatus.Playing) {
                 serverQueue.songs.shift();
                 this.playSong(guild, serverQueue.songs[0], player);
             }
