@@ -75,8 +75,9 @@ export class MusicHandler {
         player.play(createAudioResource(stream.stdout));*/
 
         player.play(createAudioResource(ytdl((await song).url, { filter: "audioonly", quality: "lowestaudio" })));
-        player.on("stateChange", (oldState, newState) => {
-            if (newState == AudioPlayerStatus.Idle && oldState == AudioPlayerStatus.Playing) {
+        player.on(AudioPlayerStatus.Idle, (oldState, newState) => {
+            console.log(oldState);
+            if (oldState == AudioPlayerStatus.Playing) {
                 serverQueue.songs.shift();
                 this.playSong(guild, serverQueue.songs[0], player);
             }
@@ -91,8 +92,6 @@ export class MusicHandler {
 
     async skip(guild, interaction) {
         const serverQueue = queue.get(guild.id);
-
-        const prevName = await serverQueue.songs[0].title;
 
         if (!serverQueue.songs[1]) return interaction.reply("Non ci sono altre canzoni da riprodurre!");
 
