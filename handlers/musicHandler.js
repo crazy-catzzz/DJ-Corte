@@ -77,7 +77,7 @@ export class MusicHandler {
         player.play(createAudioResource(ytdl((await song).url, { filter: "audioonly", quality: "lowestaudio" })));
         player.on(AudioPlayerStatus.Idle, (oldState, newState) => {
             console.log(oldState);
-            if (oldState == AudioPlayerStatus.Playing) {
+            if (oldState.status == AudioPlayerStatus.Playing) {
                 serverQueue.songs.shift();
                 this.playSong(guild, serverQueue.songs[0], player);
             }
