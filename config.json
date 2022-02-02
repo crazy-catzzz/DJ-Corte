@@ -1,0 +1,23 @@
+{
+    "testing": {
+        "clientId": "937004285370191872",
+        "guildId": "832614765456130068"
+    },
+
+    "commands": {
+        "clientId": "937004285370191872"
+    },
+
+    "bot": {
+        "token": "OTM3MDA0Mjg1MzcwMTkxODcy.YfVbPg.UVGPB02kfGfrBFzYRiGS2qu2oMY",
+        "intents": [
+            "GUILDS",
+            "GUILD_MESSAGES",
+            "GUILD_VOICE_STATES"
+        ],
+        "partials": [
+            "CHANNEL",
+            "MESSAGE"
+        ]
+    }
+}
