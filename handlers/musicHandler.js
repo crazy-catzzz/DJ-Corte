@@ -1,6 +1,6 @@
-//import ytdl from "ytdl-core";
+import ytdl from "ytdl-core";
 
-import ytdl from "youtube-dl-exec";
+import ytdle from "youtube-dl-exec";
 
 import { MessageEmbed } from "discord.js";
 import { createAudioPlayer, createAudioResource, joinVoiceChannel, AudioPlayerStatus } from "@discordjs/voice";
@@ -65,7 +65,7 @@ export class MusicHandler {
     async playSong(guild, song) {
         const serverQueue = queue.get(guild.id);
         
-        const stream = ytdl((await song).url, {
+        const stream = ytdle((await song).url, {
             o: '-',
             q: '',
             f: 'bestaudio[ext=webm+acodec=opus+asr=48000]/bestaudio',
