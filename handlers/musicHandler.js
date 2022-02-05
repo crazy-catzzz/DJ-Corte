@@ -58,13 +58,20 @@ export class MusicHandler {
             }
         } else {
             serverQueue.songs.push(await song);
-            console.log(serverQueue.songs);
+            //console.log(serverQueue.songs);
+            interaction.reply(`**${(await song).title}** è stata aggiunta alla queue!`);
         }
     }
 
     async playSong(guild, song) {
         const serverQueue = queue.get(guild.id);
         
+        if (!song) {
+            serverQueue.connection.destroy();
+            queue.delete(guild.id);
+            return;
+        }
+
         /*const stream = ytdle((await song).url, {
             o: '-',
             q: '',
@@ -83,11 +90,7 @@ export class MusicHandler {
             }
         });
 
-        if (!song) {
-            serverQueue.connection.destroy();
-            queue.delete(guild.id);
-            return;
-        }
+        serverQueue.textChannel.send(`Inizio a riprodurre **${(await song).title}**`)
     }
 
     async skip(guild, interaction) {

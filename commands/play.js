@@ -12,7 +12,5 @@ export default new class extends Command {
         const song = mHandler.getSong(songURL);
 
         mHandler.addToQueue(song, interaction.guild.id, interaction);
-
-        interaction.reply(`**${(await song).title}** è stata aggiunta alla queue!`);
     }
 }

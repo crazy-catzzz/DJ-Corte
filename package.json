@@ -1,7 +1,7 @@
 {
-  "name": "cerberus-2",
+  "name": "dj-corte",
   "version": "1.0.0",
-  "description": "",
+  "description": "Il bot musicale customizzato della Corte d'Assise (goliardicamente)",
   "type": "module",
   "main": "index.js",
   "scripts": {
