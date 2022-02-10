@@ -1,7 +1,4 @@
 import ytdl from "ytdl-core";
-
-//import ytdle from "youtube-dl-exec";
-
 import { MessageEmbed } from "discord.js";
 import { createAudioPlayer, createAudioResource, joinVoiceChannel, AudioPlayerStatus } from "@discordjs/voice";
 
@@ -67,19 +64,8 @@ export class MusicHandler {
         const serverQueue = queue.get(guild.id);
         
         if (!song) {
-            serverQueue.connection.destroy();
-            queue.delete(guild.id);
-            return;
+            player.stop();
         }
-
-        /*const stream = ytdle((await song).url, {
-            o: '-',
-            q: '',
-            f: 'bestaudio[ext=webm+acodec=opus+asr=48000]/bestaudio',
-            r: '100K',
-        }, { stdio: ['ignore', 'pipe', 'ignore'] });
-
-        player.play(createAudioResource(stream.stdout));*/
 
         player.play(createAudioResource(ytdl((await song).url, { filter: "audioonly", quality: "lowestaudio" })));
         player.on(AudioPlayerStatus.Idle, (oldState, newState) => {
@@ -88,6 +74,12 @@ export class MusicHandler {
                 serverQueue.songs.shift();
                 this.playSong(guild, serverQueue.songs[0], player);
             }
+        });
+        player.on("error", error => {
+            console.log(error);
+            serverQueue.connection.destroy();
+            queue.delete(guild.id);
+            return serverQueue.textChannel.send(`Si è verificato un errore!`);
         });
 
         serverQueue.textChannel.send(`Inizio a riprodurre **${(await song).title}**`)
