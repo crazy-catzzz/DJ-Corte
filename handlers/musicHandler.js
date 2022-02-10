@@ -2,27 +2,27 @@ import ytdl from "ytdl-core";
 import { MessageEmbed } from "discord.js";
 import { createAudioPlayer, createAudioResource, joinVoiceChannel, AudioPlayerStatus } from "@discordjs/voice";
 
-const queue = new Map();
-const player = createAudioPlayer();
+const queue = new Map(); // Map delle queue
+const player = createAudioPlayer(); // Crea il player audio
 
 export class MusicHandler {
     async getSong(query, url) {
         if (url) {
-            console.log(query);
+            console.log(query); // Inutile
         } else {
-            const songInfo = await ytdl.getInfo(query);
+            const songInfo = await ytdl.getInfo(query); // Ottieni info dell'URL del video
             const song = {
                 title: songInfo.videoDetails.title,
                 url: songInfo.videoDetails.video_url,
             }
-            return song;
+            return song; // Ridai al programma la canzone trovata
         }
     }
 
     async addToQueue(song, guildId, interaction) {
-        const serverQueue = queue.get(guildId);
+        const serverQueue = queue.get(guildId); // Prendi la queue del server dalla map di queue
 
-        if (!serverQueue) {
+        if (!serverQueue) { // Se la queue non esiste, creala
             const queueConstruct = {
                 textChannel: interaction.channel,
                 voiceChannel: interaction.member.voice.channel,
@@ -43,46 +43,46 @@ export class MusicHandler {
                     adapterCreator: interaction.member.voice.channel.guild.voiceAdapterCreator,
                 });
                 
-                queueConstruct.connection = connection;
+                queueConstruct.connection = connection; // Inserisci la connessione nel costrutto della queue
 
                 connection.subscribe(player);
 
-                this.playSong(interaction.guild, await queueConstruct.songs[0]);
+                this.playSong(interaction.guild, await queueConstruct.songs[0], interaction); // Riproduci la canzone data
 
             } catch (err) {
                 console.log(err);
                 queue.delete(guildId);
             }
         } else {
-            serverQueue.songs.push(await song);
+            serverQueue.songs.push(await song); // Aggiungi la canzone alla queue
             //console.log(serverQueue.songs);
             interaction.reply(`**${(await song).title}** è stata aggiunta alla queue!`);
         }
     }
 
-    async playSong(guild, song) {
+    async playSong(guild, song, interaction) {
         const serverQueue = queue.get(guild.id);
         
         if (!song) {
-            player.stop();
+            player.stop(); // Ferma il player per evitare errori
         }
 
         player.play(createAudioResource(ytdl((await song).url, { filter: "audioonly", quality: "lowestaudio" })));
         player.on(AudioPlayerStatus.Idle, (oldState, newState) => {
             console.log(oldState);
             if (oldState.status == AudioPlayerStatus.Playing) {
-                serverQueue.songs.shift();
-                this.playSong(guild, serverQueue.songs[0], player);
+                serverQueue.songs.shift(); // Porta indietro di 1 l'array di canzoni
+                this.playSong(guild, serverQueue.songs[0], player); // Riproduci la canzone
             }
         });
         player.on("error", error => {
             console.log(error);
-            serverQueue.connection.destroy();
-            queue.delete(guild.id);
+            serverQueue.connection.destroy(); // Esci dalla vc
+            queue.delete(guild.id); // Elimina la queue
             return serverQueue.textChannel.send(`Si è verificato un errore!`);
         });
 
-        serverQueue.textChannel.send(`Inizio a riprodurre **${(await song).title}**`)
+        interaction.reply(`Inizio a riprodurre **${(await song).title}**`);
     }
 
     async skip(guild, interaction) {
