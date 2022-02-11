@@ -60,7 +60,7 @@ export class MusicHandler {
         }
     }
 
-    async playSong(guild, song, interaction = undefined) {
+    async playSong(guild, song, interaction) {
         const serverQueue = queue.get(guild.id);
         
         if (!song) {
@@ -69,10 +69,10 @@ export class MusicHandler {
 
         player.play(createAudioResource(ytdl((await song).url, { filter: "audioonly", quality: "lowestaudio" })));
         player.on(AudioPlayerStatus.Idle, (oldState, newState) => {
-            console.log(oldState);
+            //console.log(oldState);
             if (oldState.status == AudioPlayerStatus.Playing) {
                 serverQueue.songs.shift(); // Porta indietro di 1 l'array di canzoni
-                this.playSong(guild, serverQueue.songs[0], player); // Riproduci la canzone
+                this.playSong(guild, serverQueue.songs[0], player, undefined); // Riproduci la canzone
             }
         });
         player.on("error", error => {
