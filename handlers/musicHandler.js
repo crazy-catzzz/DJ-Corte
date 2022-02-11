@@ -60,7 +60,7 @@ export class MusicHandler {
         }
     }
 
-    async playSong(guild, song, interaction) {
+    async playSong(guild, song, interaction = undefined) {
         const serverQueue = queue.get(guild.id);
         
         if (!song) {
@@ -82,7 +82,8 @@ export class MusicHandler {
             return serverQueue.textChannel.send(`Si è verificato un errore!`);
         });
 
-        interaction.reply(`Inizio a riprodurre **${(await song).title}**`);
+        if (interaction == undefined) serverQueue.textChannel.send(`Inizio a riprodurre **${(await song).title}**`);
+        else interaction.reply(`Inizio a riprodurre **${(await song).title}**`);
     }
 
     async skip(guild, interaction) {
