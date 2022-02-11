@@ -82,14 +82,14 @@ export class MusicHandler {
             return serverQueue.textChannel.send(`Si è verificato un errore!`);
         });
 
-        if (interaction == undefined) serverQueue.textChannel.send(`Inizio a riprodurre **${(await song).title}**`);
+        if (interaction === undefined) serverQueue.textChannel.send(`Inizio a riprodurre **${(await song).title}**`);
         else interaction.reply(`Inizio a riprodurre **${(await song).title}**`);
     }
 
     async skip(guild, interaction) {
         const serverQueue = queue.get(guild.id);
 
-        if (!serverQueue.songs[1]) return interaction.reply("Non ci sono altre canzoni da riprodurre!");
+        if (!serverQueue.songs[1] || !serverQueue) return interaction.reply("Non ci sono altre canzoni da riprodurre!");
 
         serverQueue.songs.shift();
         player.play(createAudioResource(ytdl((await serverQueue.songs[0]).url, { filter: "audioonly", quality: "lowestaudio" })));
