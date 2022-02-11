@@ -64,7 +64,7 @@ export class MusicHandler {
         const serverQueue = queue.get(guild.id);
         
         if (!song) {
-            player.stop(); // Ferma il player per evitare errori
+            return player.stop(); // Ferma il player per evitare errori (?)
         }
 
         player.play(createAudioResource(ytdl((await song).url, { filter: "audioonly", quality: "lowestaudio" })));
