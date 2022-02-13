@@ -1,13 +1,4 @@
 {
-    "testing": {
-        "clientId": "937004285370191872",
-        "guildId": "843821471037128724"
-    },
-
-    "commands": {
-        "clientId": "937004285370191872"
-    },
-
     "bot": {
         "intents": [
             "GUILDS",

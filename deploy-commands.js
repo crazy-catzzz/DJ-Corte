@@ -5,7 +5,6 @@
 import { SlashCommandBuilder, SlashCommandStringOption } from '@discordjs/builders';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
-import config from './config.json';
 import cmdFile from './commands/slashCommandList.json';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -39,7 +38,7 @@ const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN);
 (async () => {
 	try {
 		await rest.put(
-			Routes.applicationGuildCommands(config.testing.clientId, config.testing.guildId),
+			Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
 			{ body: commands },
 		);
 
