@@ -30,6 +30,7 @@ export class MusicHandler {
                 songs: [],
                 volume: 5,
                 playing: true,
+                loop: false,
             };
 
             queue.set(guildId, queueConstruct);
@@ -47,7 +48,7 @@ export class MusicHandler {
 
                 connection.subscribe(player);
 
-                this.playSong(interaction.guild, await queueConstruct.songs[0], interaction); // Riproduci la canzone data
+                this.playSong(interaction.guild, await queueConstruct.songs[0], queueConstruct.loop); // Riproduci la canzone data
 
             } catch (err) {
                 console.log(err);
@@ -60,17 +61,20 @@ export class MusicHandler {
         }
     }
 
-    async playSong(guild, song, interaction) {
+    async playSong(guild, song) {
         const serverQueue = queue.get(guild.id);
         
-        if (!song) {
-            return player.stop(); // Ferma il player per evitare errori (?)
+        if (!song) { // Termina la connessione se non esiste la canzone dopo
+            serverQueue.connection.destroy();
+            queue.delete(guild);
+            return;
         }
 
         player.play(createAudioResource(ytdl((await song).url, { filter: "audioonly", quality: "lowestaudio" })));
         player.on(AudioPlayerStatus.Idle, (oldState, newState) => {
             //console.log(oldState);
             if (oldState.status == AudioPlayerStatus.Playing) {
+                if (serverQueue.loop) serverQueue.songs.push(song); // Se il loop è attivo porta in cima all'array di canzoni la canzone corrente (C'è sicuramente un modo migliore ma ora non ho voglia di trovarlo)
                 serverQueue.songs.shift(); // Porta indietro di 1 l'array di canzoni
                 this.playSong(guild, serverQueue.songs[0], player, undefined); // Riproduci la canzone
             }
@@ -82,8 +86,7 @@ export class MusicHandler {
             return serverQueue.textChannel.send(`Si è verificato un errore!`);
         });
 
-        if (interaction === undefined) serverQueue.textChannel.send(`Inizio a riprodurre **${(await song).title}**`);
-        else interaction.reply(`Inizio a riprodurre **${(await song).title}**`);
+        serverQueue.textChannel.send(`Inizio a riprodurre **${(await song).title}**`);
     }
 
     async skip(guild, interaction) {
@@ -119,5 +122,18 @@ export class MusicHandler {
         serverQueue.connection.destroy();
         queue.delete(guild);
         return interaction.reply(`Player stoppato e queue ripulita.`);
+    }
+
+    async loop(guild, interaction) {
+        const serverQueue = queue.get(guild);
+
+        if (serverQueue.loop) {
+            serverQueue.loop = false;
+            return interaction.reply("Ho disabilitato il loop!");
+        } else if (!serverQueue.loop) {
+            serverQueue.loop = true;
+            return interaction.reply("Ho abilitato il loop!");
+        }
+        
     }
 }
