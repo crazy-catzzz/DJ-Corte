@@ -12,6 +12,6 @@
 
         { "name": "help", "description": "Mostra i comandi.", "options": [] },
 
-        { "name": "loop", "description": "Attiva/Disattiva il loop della queue.", "options": [] }
+        { "name": "loop", "description": "Attiva/Disattiva il loop della queue. [PARZIALMENTE FUNZIONANTE]", "options": [] }
     ]
 }
