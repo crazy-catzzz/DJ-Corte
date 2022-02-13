@@ -2,6 +2,9 @@
 
 import config from "./config.json";
 
+import dotenv from "dotenv";
+dotenv.config();
+
 import { MusicHandler } from "./handlers/musicHandler.js";
 export const mHandler = new MusicHandler();
 
@@ -15,7 +18,7 @@ const bot = new Client({
 });
 
 //Log the bot in
-bot.login(config.bot.token)
+bot.login()
 
 bot.on("ready", () => {
     console.log("Ready!");

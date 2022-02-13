@@ -9,7 +9,6 @@
     },
 
     "bot": {
-        "token": "OTM3MDA0Mjg1MzcwMTkxODcy.YfVbPg.UVGPB02kfGfrBFzYRiGS2qu2oMY",
         "intents": [
             "GUILDS",
             "GUILD_MESSAGES",

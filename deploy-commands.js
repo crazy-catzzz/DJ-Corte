@@ -7,6 +7,8 @@ import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
 import config from './config.json';
 import cmdFile from './commands/slashCommandList.json';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const commands = [];
 
@@ -32,7 +34,7 @@ cmdFile.commands.forEach(command => {
 
 commands.map(command => command.toJSON());
 
-const rest = new REST({ version: '9' }).setToken(config.bot.token);
+const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN);
 
 (async () => {
 	try {
