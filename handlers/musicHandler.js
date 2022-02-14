@@ -76,14 +76,14 @@ export class MusicHandler {
             if (oldState.status == AudioPlayerStatus.Playing) {
                 if (serverQueue.loop) serverQueue.songs.push(song); // Se il loop è attivo porta in cima all'array di canzoni la canzone corrente (C'è sicuramente un modo migliore ma ora non ho voglia di trovarlo)
                 serverQueue.songs.shift(); // Porta indietro di 1 l'array di canzoni
-                this.playSong(guild, serverQueue.songs[0], player, undefined); // Riproduci la canzone
+                this.playSong(guild, serverQueue.songs[0]); // Riproduci la canzone
             }
         });
         player.on("error", error => {
             console.log(error);
             serverQueue.connection.destroy(); // Esci dalla vc
             queue.delete(guild.id); // Elimina la queue
-            return serverQueue.textChannel.send(`Si è verificato un errore!`);
+            return serverQueue.textChannel.send(`Si è verificato un errore mentre riproducevo un brano!`);
         });
 
         serverQueue.textChannel.send(`Inizio a riprodurre **${(await song).title}**`);
