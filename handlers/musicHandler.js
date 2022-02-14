@@ -6,17 +6,13 @@ const queue = new Map(); // Map delle queue
 const player = createAudioPlayer(); // Crea il player audio
 
 export class MusicHandler {
-    async getSong(query, url) {
-        if (url) {
-            console.log(query); // Inutile
-        } else {
-            const songInfo = await ytdl.getInfo(query); // Ottieni info dell'URL del video
-            const song = {
-                title: songInfo.videoDetails.title,
-                url: songInfo.videoDetails.video_url,
-            }
-            return song; // Ridai al programma la canzone trovata
+    async getSong(query) {
+        const songInfo = await ytdl.getInfo(query); // Ottieni info dell'URL del video
+        const song = {
+            title: songInfo.videoDetails.title,
+            url: songInfo.videoDetails.video_url,
         }
+        return song; // Ridai al programma la canzone trovata
     }
 
     async addToQueue(song, guildId, interaction) {
@@ -48,6 +44,7 @@ export class MusicHandler {
 
                 connection.subscribe(player);
 
+                interaction.reply(`**${(await song).title}** è stata aggiunta alla queue!`);
                 this.playSong(interaction.guild, await queueConstruct.songs[0], queueConstruct.loop); // Riproduci la canzone data
 
             } catch (err) {
@@ -71,15 +68,15 @@ export class MusicHandler {
         }
 
         player.play(createAudioResource(ytdl((await song).url, { filter: "audioonly", quality: "lowestaudio" })));
-        player.on(AudioPlayerStatus.Idle, (oldState, newState) => {
+        player.once(AudioPlayerStatus.Idle, (oldState, newState) => {
             //console.log(oldState);
             if (oldState.status == AudioPlayerStatus.Playing) {
-                if (serverQueue.loop) serverQueue.songs.push(song); // Se il loop è attivo porta in cima all'array di canzoni la canzone corrente (C'è sicuramente un modo migliore ma ora non ho voglia di trovarlo)
+                //if (serverQueue.loop) serverQueue.songs.push(song); // Se il loop è attivo porta in cima all'array di canzoni la canzone corrente (C'è sicuramente un modo migliore ma ora non ho voglia di trovarlo)
                 serverQueue.songs.shift(); // Porta indietro di 1 l'array di canzoni
                 this.playSong(guild, serverQueue.songs[0]); // Riproduci la canzone
             }
         });
-        player.on("error", error => {
+        player.once("error", error => {
             console.log(error);
             serverQueue.connection.destroy(); // Esci dalla vc
             queue.delete(guild.id); // Elimina la queue

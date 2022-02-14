@@ -9,7 +9,7 @@ export default new class extends Command {
 
         const songURL = interaction.options.getString('song');
 
-        const song = mHandler.getSong(songURL);
+        const song = mHandler.getSong(songURL, false, interaction);
 
         mHandler.addToQueue(song, interaction.guild.id, interaction);
     }
