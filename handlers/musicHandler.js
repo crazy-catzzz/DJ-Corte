@@ -68,7 +68,7 @@ export class MusicHandler {
         }
 
         player.play(createAudioResource(ytdl((await song).url, { filter: "audioonly", quality: "lowestaudio" })));
-        player.once(AudioPlayerStatus.Idle, (oldState, newState) => {
+        player.on(AudioPlayerStatus.Idle, (oldState, newState) => {
             //console.log(oldState);
             if (oldState.status == AudioPlayerStatus.Playing) {
                 //if (serverQueue.loop) serverQueue.songs.push(song); // Se il loop è attivo porta in cima all'array di canzoni la canzone corrente (C'è sicuramente un modo migliore ma ora non ho voglia di trovarlo)
@@ -76,7 +76,7 @@ export class MusicHandler {
                 this.playSong(guild, serverQueue.songs[0]); // Riproduci la canzone
             }
         });
-        player.once("error", error => {
+        player.on("error", error => {
             console.log(error);
             serverQueue.connection.destroy(); // Esci dalla vc
             queue.delete(guild.id); // Elimina la queue
