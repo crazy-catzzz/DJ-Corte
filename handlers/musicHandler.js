@@ -78,7 +78,6 @@ export class MusicHandler {
         });
         player.on("error", error => {
             console.log(error);
-            serverQueue.connection.destroy(); // Esci dalla vc
             queue.delete(guild.id); // Elimina la queue
             return serverQueue.textChannel.send(`Si è verificato un errore mentre riproducevo un brano!`);
         });
