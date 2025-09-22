@@ -6,6 +6,3 @@ Se nel mondo ci fosse un po' di bene
 e ugnuno si considerasse suo fratello
 ci sarebbero meno pene
 e il mondo ne sarebbe assai più bello
-
-# Hosting
-non ho voglia di spiegare come hostarlo lol
